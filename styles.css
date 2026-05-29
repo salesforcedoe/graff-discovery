@@ -79,6 +79,13 @@ body {
   color: white;
 }
 .btn-primary:hover { background: #a01a33; }
+.btn-primary:disabled { background: #6e6e6e; cursor: not-allowed; }
+.btn-secondary {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border-color: #444;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.18); }
 .btn-ghost {
   background: transparent;
   color: #ccc;

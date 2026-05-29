@@ -92,10 +92,11 @@
 
   function bindButtons() {
     document.getElementById("export-btn").addEventListener("click", exportMarkdown);
+    document.getElementById("upload-btn").addEventListener("click", uploadToDrive);
     document.getElementById("clear-btn").addEventListener("click", clearAll);
   }
 
-  function exportMarkdown() {
+  function buildMarkdown() {
     const lines = [];
     const date = new Date().toISOString().slice(0, 10);
     const notetaker = (state["notetaker-name"] || "").trim();
@@ -148,16 +149,73 @@
       lines.push("");
     }
 
-    const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
+    const slug = notetaker ? "-" + notetaker.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : "";
+    return {
+      filename: `graff-visit-notes-${date}${slug}.md`,
+      content: lines.join("\n"),
+      notetaker: notetaker
+    };
+  }
+
+  function exportMarkdown() {
+    const md = buildMarkdown();
+    const blob = new Blob([md.content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    const slug = notetaker ? "-" + notetaker.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : "";
     a.href = url;
-    a.download = `graff-visit-notes-${date}${slug}.md`;
+    a.download = md.filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  async function uploadToDrive() {
+    const url = window.GRAFF_UPLOAD_URL;
+    if (!url || url === "PASTE_APPS_SCRIPT_DEPLOYMENT_URL_HERE") {
+      alert("Drive upload is not configured yet. For now, use Export Markdown and drop the file in the shared Drive folder manually.");
+      return;
+    }
+
+    const md = buildMarkdown();
+    if (!md.notetaker) {
+      const proceed = confirm("Notetaker name is empty. Upload anyway? Filename will be untagged.");
+      if (!proceed) return;
+    }
+
+    const btn = document.getElementById("upload-btn");
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "Uploading…";
+    setStatus("Uploading…", "saving");
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: JSON.stringify({
+          secret: window.GRAFF_UPLOAD_SECRET,
+          filename: md.filename,
+          content: md.content
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      setStatus("Uploaded", "saved");
+      btn.textContent = "Uploaded ✓";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 2500);
+    } catch (e) {
+      setStatus("Upload failed", "error");
+      btn.textContent = originalText;
+      btn.disabled = false;
+      alert("Upload failed: " + e.message + "\n\nFalling back to local download.");
+      exportMarkdown();
+    }
   }
 
   function clearAll() {
