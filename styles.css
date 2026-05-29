@@ -235,6 +235,36 @@ textarea.has-content {
   border-color: #c8c8c0;
 }
 
+.notetaker-field label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+.notetaker-field input {
+  font: inherit;
+  font-size: 15px;
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fafaf7;
+  color: var(--ink);
+  transition: border-color 0.12s, background 0.12s;
+}
+.notetaker-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: white;
+}
+.notetaker-field input.has-content {
+  background: white;
+  border-color: #c8c8c0;
+}
+
 .freeform {
   margin-top: 20px;
   padding-top: 20px;

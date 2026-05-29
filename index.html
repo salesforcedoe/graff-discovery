@@ -25,6 +25,7 @@
   <nav id="sidebar" class="sidebar">
     <div class="sidebar-section">
       <h3>Context</h3>
+      <a href="#notetaker" class="nav-link">Notetaker</a>
       <a href="#context" class="nav-link">Strategic context</a>
     </div>
     <div class="sidebar-section">
@@ -45,11 +46,18 @@
     <div class="sidebar-section">
       <h3>Wrap-up</h3>
       <a href="#themes" class="nav-link">Themes to listen for</a>
-      <a href="#logistics" class="nav-link">Logistics to confirm</a>
     </div>
   </nav>
 
   <main class="content">
+
+    <section id="notetaker" class="card">
+      <h2>Notetaker</h2>
+      <div class="notetaker-field">
+        <label for="notetaker-name">Salesforce notetaker name</label>
+        <input type="text" id="notetaker-name" data-key="notetaker-name" placeholder="Your name (e.g., Sam Liang)" autocomplete="name">
+      </div>
+    </section>
 
     <section id="context" class="card">
       <h2>Strategic context</h2>
@@ -155,11 +163,6 @@
         <label>Cross-cutting takeaways for June 10</label>
         <textarea data-key="freeform-themes" placeholder="What patterns emerged across personas? Which BVS quotes are usable?"></textarea>
       </div>
-    </section>
-
-    <section id="logistics" class="card">
-      <h2>Logistics to confirm with Matt</h2>
-      <ul class="checklist" data-section="logistics"></ul>
     </section>
 
   </main>

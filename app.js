@@ -7,7 +7,6 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     renderQuestions();
-    renderLogistics();
     hydrateInputs();
     bindInputs();
     bindButtons();
@@ -62,23 +61,6 @@
     });
   }
 
-  function renderLogistics() {
-    const ul = document.querySelector('.checklist[data-section="logistics"]');
-    if (!ul) return;
-    const items = window.GRAFF_DATA.logistics || [];
-    ul.innerHTML = items
-      .map((item, i) => {
-        const key = `logistics-${i + 1}`;
-        return `
-          <li>
-            <input type="checkbox" id="${key}" data-key="${key}">
-            <label for="${key}">${escapeHtml(item)}</label>
-          </li>
-        `;
-      })
-      .join("");
-  }
-
   function hydrateInputs() {
     document.querySelectorAll("textarea[data-key]").forEach((ta) => {
       const v = state[ta.dataset.key];
@@ -87,24 +69,22 @@
         ta.classList.add("has-content");
       }
     });
-    document.querySelectorAll('input[type="checkbox"][data-key]').forEach((cb) => {
-      cb.checked = !!state[cb.dataset.key];
+    document.querySelectorAll('input[type="text"][data-key]').forEach((inp) => {
+      const v = state[inp.dataset.key];
+      if (v) {
+        inp.value = v;
+        inp.classList.add("has-content");
+      }
     });
   }
 
   function bindInputs() {
     document.addEventListener("input", (e) => {
       const t = e.target;
-      if (t.tagName === "TEXTAREA" && t.dataset.key) {
+      if (!t.dataset || !t.dataset.key) return;
+      if (t.tagName === "TEXTAREA" || (t.tagName === "INPUT" && t.type === "text")) {
         state[t.dataset.key] = t.value;
         t.classList.toggle("has-content", t.value.trim().length > 0);
-        saveState();
-      }
-    });
-    document.addEventListener("change", (e) => {
-      const t = e.target;
-      if (t.type === "checkbox" && t.dataset.key) {
-        state[t.dataset.key] = t.checked;
         saveState();
       }
     });
@@ -118,9 +98,11 @@
   function exportMarkdown() {
     const lines = [];
     const date = new Date().toISOString().slice(0, 10);
+    const notetaker = (state["notetaker-name"] || "").trim();
     lines.push("# Graff Dealership Visit — Discovery Notes");
     lines.push("");
     lines.push(`**Visit date:** Tuesday, June 9, 2026`);
+    if (notetaker) lines.push(`**Notetaker:** ${notetaker}`);
     lines.push(`**Notes exported:** ${date}`);
     lines.push("");
 
@@ -166,20 +148,12 @@
       lines.push("");
     }
 
-    lines.push(`## ${window.GRAFF_PERSONA_LABELS["logistics"]}`);
-    lines.push("");
-    (window.GRAFF_DATA.logistics || []).forEach((item, i) => {
-      const key = `logistics-${i + 1}`;
-      const checked = state[key] ? "x" : " ";
-      lines.push(`- [${checked}] ${item}`);
-    });
-    lines.push("");
-
     const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+    const slug = notetaker ? "-" + notetaker.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : "";
     a.href = url;
-    a.download = `graff-visit-notes-${date}.md`;
+    a.download = `graff-visit-notes-${date}${slug}.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -195,8 +169,9 @@
       ta.value = "";
       ta.classList.remove("has-content");
     });
-    document.querySelectorAll('input[type="checkbox"][data-key]').forEach((cb) => {
-      cb.checked = false;
+    document.querySelectorAll('input[type="text"][data-key]').forEach((inp) => {
+      inp.value = "";
+      inp.classList.remove("has-content");
     });
     setStatus("Cleared", "saved");
   }

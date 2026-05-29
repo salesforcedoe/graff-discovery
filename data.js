@@ -73,14 +73,6 @@ window.GRAFF_DATA = {
     "How often do you have to dispute or reconcile a payment amount with GMF or Safeguard?",
     "When a VSC is cancelled or charged back, how is the dealer reserve / commission handled — and is that visible in real time?",
     "Where does most of your back-office time go when it comes to GMF specifically?"
-  ],
-  "logistics": [
-    "Final list of personas/people and time slots (calendar description was truncated)",
-    "Which Graff store(s) — single rooftop or multiple?",
-    "Recording / note-taking permissions",
-    "Whether any GMF field rep or product team member is joining",
-    "Dress code (GM dealer-appropriate, not Salesforce-branded)",
-    "Does Graff use GMF Approval Center today, or are they on a different stack? (frames every conversation)"
   ]
 };
 
@@ -94,6 +86,5 @@ window.GRAFF_PERSONA_LABELS = {
   "persona-6": "6. Parts Manager",
   "persona-7": "7. BDC / CX Manager",
   "persona-8": "8. Office Manager / Controller",
-  "themes": "Themes / June 10 takeaways",
-  "logistics": "Logistics to confirm"
+  "themes": "Themes / June 10 takeaways"
 };
