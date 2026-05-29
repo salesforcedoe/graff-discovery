@@ -498,7 +498,6 @@ textarea.has-content {
 @media (max-width: 480px) {
   .topbar-inner { padding: 8px 12px; }
   .brand h1 { font-size: 15px; }
-  .actions .btn-ghost { display: none; } /* Clear All hidden on phones; still in desktop */
   .photo-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
