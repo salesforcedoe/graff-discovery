@@ -1,6 +1,6 @@
 // Drive upload endpoint (Apps Script web app deployed by Sam).
 // Replace the URL below with the deployed /exec URL after deployment.
-window.GRAFF_UPLOAD_URL = "PASTE_APPS_SCRIPT_DEPLOYMENT_URL_HERE";
+window.GRAFF_UPLOAD_URL = "https://script.google.com/a/macros/salesforce.com/s/AKfycbyV92ITZg2mrH0A7hz4Acq4E6PQv7II8Q6y8IUvB1_tC5VgIwt0KLhlJfHwvt7tg5EJww/exec";
 
 // Shared secret — must match SHARED_SECRET in the Apps Script.
 // Not a real auth boundary; just a spam guard.
