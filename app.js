@@ -93,6 +93,16 @@
   function bindButtons() {
     document.getElementById("export-btn").addEventListener("click", exportMarkdown);
     document.getElementById("clear-btn").addEventListener("click", clearAll);
+
+    // Mobile: collapse the sidebar dropdown after a nav link is tapped.
+    document.querySelectorAll(".sidebar .nav-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        const details = document.querySelector(".sidebar-toggle");
+        if (details && window.matchMedia("(max-width: 900px)").matches) {
+          details.open = false;
+        }
+      });
+    });
   }
 
   function buildMarkdown() {

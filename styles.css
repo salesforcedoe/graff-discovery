@@ -94,10 +94,6 @@ body {
   grid-template-columns: 240px 1fr;
   gap: 32px;
 }
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { position: static; max-height: none; }
-}
 
 .sidebar {
   position: sticky;
@@ -107,6 +103,24 @@ body {
   overflow-y: auto;
   font-size: 13px;
 }
+.sidebar-toggle > summary {
+  list-style: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  display: none; /* hidden on desktop */
+  user-select: none;
+}
+.sidebar-toggle > summary::-webkit-details-marker { display: none; }
+.sidebar-toggle > summary::after {
+  content: " ▾";
+  color: var(--ink-faint);
+}
+.sidebar-toggle[open] > summary::after { content: " ▴"; }
+.sidebar-links { display: block; }
 .sidebar-section {
   margin-bottom: 18px;
 }
@@ -318,6 +332,65 @@ textarea.has-content {
   accent-color: var(--accent);
 }
 .checklist label { cursor: pointer; flex: 1; }
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 12px;
+  }
+  .topbar-inner {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .brand h1 { font-size: 16px; }
+  .meta { font-size: 11px; }
+  .actions { gap: 6px; }
+  .btn { padding: 7px 10px; font-size: 12px; }
+  .save-status { display: none; }
+
+  .sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    margin-bottom: 4px;
+  }
+  .sidebar-toggle > summary { display: block; }
+  .sidebar-toggle:not([open]) .sidebar-links { display: none; }
+  .sidebar-toggle[open] .sidebar-links {
+    margin-top: 8px;
+    padding: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .nav-link { padding: 10px 8px; font-size: 14px; }
+
+  .card {
+    padding: 16px 16px;
+    border-radius: 8px;
+  }
+  .card h2 { font-size: 17px; gap: 8px; }
+  .card-meta { font-size: 11px; }
+  .learn { font-size: 13px; padding: 8px 10px; margin-bottom: 12px; }
+  .qlist li {
+    grid-template-columns: 22px 1fr;
+    gap: 8px;
+    padding: 12px 0;
+  }
+  .q-text { font-size: 15px; }
+  /* iOS zooms in on inputs <16px — keep textarea/input at 16px */
+  textarea, .notetaker-field input { font-size: 16px; padding: 9px 11px; }
+  .freeform { padding-top: 14px; margin-top: 14px; }
+}
+
+@media (max-width: 480px) {
+  .topbar-inner { padding: 8px 12px; }
+  .brand h1 { font-size: 15px; }
+  .actions .btn-ghost { display: none; } /* Clear All hidden on phones; still in desktop */
+}
 
 @media print {
   .topbar, .sidebar, .actions { display: none; }
